@@ -20,7 +20,7 @@ jobs:
                       artifact_name: sqlite3-stats.dylib
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v1
 
             - run: mkdir dist
 
