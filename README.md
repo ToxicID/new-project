@@ -1,5 +1,5 @@
 # Welcome to the exercise on publishing packages!
-
+[![Create Release](https://github.com/ToxicID/new-project/actions/workflows/releaseExe.yml/badge.svg)](https://github.com/ToxicID/new-project/actions/workflows/releaseExe.yml)
 This exercise checks your ability to publish to a GitHub Packages registry. It is automatically graded via a workflow once you have completed the instructions.
 
 ## About this exercise
