@@ -1,45 +1,29 @@
-name: Build and publish
-
 on:
-    push:
-        tags:
-            - "*"
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
 
 jobs:
-    build:
-        name: Build for ${{ matrix.os }}
-        runs-on: ${{ matrix.os }}
-        strategy:
-            matrix:
-                include:
-                    - os: ubuntu-latest
-                      artifact_name: sqlite3-stats.so
-                    - os: windows-latest
-                      artifact_name: sqlite3-stats.dll
-                    - os: macos-latest
-                      artifact_name: sqlite3-stats.dylib
-
-        steps:
-            - uses: actions/checkout@v3
-
-            - run: mkdir dist
-
-            - name: Build for Linux
-              if: matrix.os == 'ubuntu-latest'
-              run: gcc -fPIC -lm -shared src/stats.c -o dist/sqlite3-stats.so
-
-            - name: Build for Windows
-              if: matrix.os == 'windows-latest'
-              run: gcc -fPIC -lm -shared src/stats.c -o dist/sqlite3-stats.dll
-
-            - name: Build for macOS
-              if: matrix.os == 'macos-latest'
-              run: gcc -fno-common -dynamiclib src/stats.c -o dist/sqlite3-stats.dylib
-
-            - name: Upload binaries to release
-              uses: svenstaro/upload-release-action@v2
-              with:
-                  repo_token: ${{ secrets.GITHUB_TOKEN }}
-                  file: dist/${{ matrix.artifact_name }}
-                  asset_name: ${{ matrix.asset_name }}
-                  tag: ${{ github.ref }}
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
